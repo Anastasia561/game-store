@@ -19,7 +19,7 @@ VALUES ('$2a$10$vLrzSWN6uhaiMxMaiKwG4u77Dzu81A4/V.vL.hU0Ns2Gsz56HnIKG', 'Alice',
        ('$2a$10$vLrzSWN6uhaiMxMaiKwG4u77Dzu81A4/V.vL.hU0Ns2Gsz56HnIKG', 'John', 'Doe', 'john@gamestore.com', 'ADMIN');
 -- pass 111
 
-INSERT INTO game (title, description, price, release_date, image_url, create_at, updated_at)
+INSERT INTO game (title, description, price, release_date, image_url, created_at, updated_at)
 VALUES ('Elden Ring', 'A massive open-world RPG.', 59.99, '2022-02-25', 'http://store.com/elden.jpg', NOW(), NOW()),
        ('Stardew Valley', 'A peaceful farming simulator.', 14.99, '2016-02-26', 'http://store.com/stardew.jpg', NOW(),
         NOW()),

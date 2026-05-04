@@ -7,7 +7,7 @@ CREATE TABLE game
     price        decimal(10, 2) NOT NULL,
     release_date date           NOT NULL,
     image_url    varchar(512)   NOT NULL,
-    create_at    timestamp      NOT NULL,
+    created_at    timestamp      NOT NULL,
     updated_at   timestamp      NOT NULL,
     CONSTRAINT game_pk PRIMARY KEY (id)
 );
