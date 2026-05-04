@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 import pl.edu.gamestore.game.service.GameService;
 import pl.edu.gamestore.wrapper.ResponseWrapper;
@@ -18,8 +19,8 @@ public class GameController {
     private final GameService gameService;
 
     @GetMapping
-    public ResponseWrapper<Page<GameResponseDto>> findAll(Pageable pageable) {
-        return ResponseWrapper.ok(gameService.findAll(pageable));
+    public ResponseWrapper<Page<GameResponseDto>> findAll(GameFilterDto filter, Pageable pageable) {
+        return ResponseWrapper.ok(gameService.findAll(filter, pageable));
     }
 
     @GetMapping("/{id}")

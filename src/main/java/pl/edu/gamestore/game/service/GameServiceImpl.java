@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 import pl.edu.gamestore.game.mapper.GameMapper;
 import pl.edu.gamestore.game.repository.GameRepository;
+import pl.edu.gamestore.game.repository.GameSpecification;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +18,8 @@ class GameServiceImpl implements GameService {
     private final GameMapper gameMapper;
 
     @Override
-    public Page<GameResponseDto> findAll(Pageable pageable) {
-        return gameRepository.findAll(pageable).map(gameMapper::toDto);
+    public Page<GameResponseDto> findAll(GameFilterDto filter, Pageable pageable) {
+        return gameRepository.findAll(GameSpecification.buildFilter(filter), pageable).map(gameMapper::toDto);
     }
 
     @Override
