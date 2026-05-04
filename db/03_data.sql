@@ -16,7 +16,7 @@ VALUES ('PC'),
 INSERT INTO person (password, first_name, last_name, email, role)
 VALUES ('$2a$10$vLrzSWN6uhaiMxMaiKwG4u77Dzu81A4/V.vL.hU0Ns2Gsz56HnIKG', 'Alice', 'Smith', 'alice@gamestore.com',
         'ADMIN'),
-       ('$2a$10$vLrzSWN6uhaiMxMaiKwG4u77Dzu81A4/V.vL.hU0Ns2Gsz56HnIKG', 'John', 'Doe', 'bob@gamestore.com', 'ADMIN');
+       ('$2a$10$vLrzSWN6uhaiMxMaiKwG4u77Dzu81A4/V.vL.hU0Ns2Gsz56HnIKG', 'John', 'Doe', 'john@gamestore.com', 'ADMIN');
 -- pass 111
 
 INSERT INTO game (title, description, price, release_date, image_url, create_at, updated_at)

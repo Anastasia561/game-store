@@ -1,0 +1,10 @@
+package pl.edu.gamestore.auth.refreshtoken.service;
+
+import pl.edu.gamestore.person.model.Person;
+
+public interface RefreshTokenService {
+
+    void create(Person person, String tokenValue);
+
+    void revoke(String tokenValue);
+}
