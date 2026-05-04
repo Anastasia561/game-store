@@ -1,3 +1,15 @@
 spring:
   application:
     name: game-store
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+
+  config:
+    import: optional:file:.env[.properties]
+
+server:
+  servlet:
+    context-path: /api
