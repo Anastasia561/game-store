@@ -2,7 +2,7 @@ package pl.edu.gamestore.game.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import pl.edu.gamestore.game.dto.GameCreateDto;
+import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 
@@ -11,7 +11,9 @@ public interface GameService {
 
     GameResponseDto findById(Long id);
 
-    Long create(GameCreateDto dto);
+    Long create(GameRequestDto dto);
 
     void delete(Long id);
+
+    GameResponseDto update(Long id, GameRequestDto dto);
 }

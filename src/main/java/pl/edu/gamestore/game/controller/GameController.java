@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.edu.gamestore.game.dto.GameCreateDto;
+import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 import pl.edu.gamestore.game.service.GameService;
@@ -37,7 +38,7 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseWrapper<Long> create(@Valid @RequestBody GameCreateDto dto) {
+    public ResponseWrapper<Long> create(@Valid @RequestBody GameRequestDto dto) {
         return ResponseWrapper.withStatus(HttpStatus.CREATED, gameService.create(dto));
     }
 
@@ -45,5 +46,11 @@ public class GameController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         gameService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseWrapper<GameResponseDto> update(@PathVariable Long id,
+                                                   @Valid @RequestBody GameRequestDto dto) {
+        return ResponseWrapper.ok(gameService.update(id, dto));
     }
 }

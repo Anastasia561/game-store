@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record GameCreateDto(
+public record GameRequestDto(
         @NotBlank(message = "Title is required")
         @Size(max = 100)
         String title,

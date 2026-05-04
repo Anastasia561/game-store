@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.edu.gamestore.game.dto.GameCreateDto;
+import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 import pl.edu.gamestore.game.mapper.GameMapper;
@@ -42,7 +42,7 @@ class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public Long create(GameCreateDto dto) {
+    public Long create(GameRequestDto dto) {
         Game game = gameMapper.toEntity(dto);
 
         Set<Genre> genres = new HashSet<>(genreRepository.findAllById(dto.genreIds()));
@@ -61,5 +61,27 @@ class GameServiceImpl implements GameService {
             throw new EntityNotFoundException("Game not found");
         }
         gameRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public GameResponseDto update(Long id, GameRequestDto dto) {
+        Game entity = gameRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Game not found"));
+
+        gameMapper.updateEntityFromDto(dto, entity);
+
+        if (dto.genreIds() != null) {
+            Set<Genre> genres = new HashSet<>(genreRepository.findAllById(dto.genreIds()));
+            entity.getGenres().clear();
+            entity.getGenres().addAll(genres);
+        }
+
+        if (dto.platformIds() != null) {
+            Set<Platform> platforms = new HashSet<>(platformRepository.findAllById(dto.platformIds()));
+            entity.getPlatforms().clear();
+            entity.getPlatforms().addAll(platforms);
+        }
+        return gameMapper.toDto(entity);
     }
 }
