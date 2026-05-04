@@ -1,5 +1,7 @@
 package pl.edu.gamestore.game.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,31 +25,37 @@ import pl.edu.gamestore.wrapper.ResponseWrapper;
 @RestController
 @RequestMapping("/games")
 @RequiredArgsConstructor
+@Tag(name = "Games", description = "Endpoints for managing games")
 public class GameController {
     private final GameService gameService;
 
+    @Operation(summary = "Endpoint for selecting page of games with optional filtering by title, genre or platform")
     @GetMapping
     public ResponseWrapper<Page<GameResponseDto>> findAll(GameFilterDto filter, Pageable pageable) {
         return ResponseWrapper.ok(gameService.findAll(filter, pageable));
     }
 
+    @Operation(summary = "Endpoint for finding game by id")
     @GetMapping("/{id}")
     public ResponseWrapper<GameResponseDto> findById(@PathVariable Long id) {
         return ResponseWrapper.ok(gameService.findById(id));
     }
 
+    @Operation(summary = "Endpoint for creating new game")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseWrapper<Long> create(@Valid @RequestBody GameRequestDto dto) {
         return ResponseWrapper.withStatus(HttpStatus.CREATED, gameService.create(dto));
     }
 
+    @Operation(summary = "Endpoint fo deleting game by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         gameService.delete(id);
     }
 
+    @Operation(summary = "Endpoint for updating game by id")
     @PutMapping("/{id}")
     public ResponseWrapper<GameResponseDto> update(@PathVariable Long id,
                                                    @Valid @RequestBody GameRequestDto dto) {
