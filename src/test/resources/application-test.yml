@@ -1,0 +1,19 @@
+testcontainers:
+  postgres:
+    image: postgres:15-alpine
+    username: ${TEST_USER}
+    password: ${TEST_PASSWORD}
+    database: ${TEST_DB}
+
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - file:./db/01_schema.sql
+        - file:./db/02_constraints.sql
+        - file:./db/03_indexes.sql
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
