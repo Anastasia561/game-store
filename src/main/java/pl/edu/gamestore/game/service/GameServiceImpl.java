@@ -71,17 +71,23 @@ class GameServiceImpl implements GameService {
 
         gameMapper.updateEntityFromDto(dto, entity);
 
-        if (dto.genreIds() != null) {
-            Set<Genre> genres = genreService.findAllByIds(dto.genreIds());
-            entity.getGenres().clear();
-            entity.getGenres().addAll(genres);
-        }
+        Set<Genre> genres = genreService.findAllByIds(dto.genreIds());
+        Set<Platform> platforms = new HashSet<>(platformService.findAllByIds(dto.platformIds()));
 
-        if (dto.platformIds() != null) {
-            Set<Platform> platforms = new HashSet<>(platformService.findAllByIds(dto.platformIds()));
-            entity.getPlatforms().clear();
-            entity.getPlatforms().addAll(platforms);
-        }
+        entity.getGenres().removeIf(g -> !dto.genreIds().contains(g.getId()));
+        genres.forEach(g -> {
+            if (entity.getGenres().stream().noneMatch(e -> e.getId().equals(g.getId()))) {
+                entity.getGenres().add(g);
+            }
+        });
+
+        entity.getPlatforms().removeIf(p -> !dto.platformIds().contains(p.getId()));
+        platforms.forEach(p -> {
+            if (entity.getPlatforms().stream().noneMatch(e -> e.getId().equals(p.getId()))) {
+                entity.getPlatforms().add(p);
+            }
+        });
+
         return gameMapper.toDto(entity);
     }
 }
