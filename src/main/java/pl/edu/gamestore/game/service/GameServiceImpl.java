@@ -14,9 +14,9 @@ import pl.edu.gamestore.game.model.Game;
 import pl.edu.gamestore.game.repository.GameRepository;
 import pl.edu.gamestore.game.repository.GameSpecification;
 import pl.edu.gamestore.genre.model.Genre;
-import pl.edu.gamestore.genre.repository.GenreRepository;
+import pl.edu.gamestore.genre.service.GenreService;
 import pl.edu.gamestore.platform.model.Platform;
-import pl.edu.gamestore.platform.repository.PlatformRepository;
+import pl.edu.gamestore.platform.service.PlatformService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,8 +25,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
-    private final GenreRepository genreRepository;
-    private final PlatformRepository platformRepository;
+    private final GenreService genreService;
+    private final PlatformService platformService;
     private final GameMapper gameMapper;
 
     @Override
@@ -45,8 +45,8 @@ class GameServiceImpl implements GameService {
     public Long create(GameRequestDto dto) {
         Game game = gameMapper.toEntity(dto);
 
-        Set<Genre> genres = new HashSet<>(genreRepository.findAllById(dto.genreIds()));
-        Set<Platform> platforms = new HashSet<>(platformRepository.findAllById(dto.platformIds()));
+        Set<Genre> genres = genreService.findAllByIds(dto.genreIds());
+        Set<Platform> platforms = new HashSet<>(platformService.findAllByIds(dto.platformIds()));
 
         game.setGenres(genres);
         game.setPlatforms(platforms);
@@ -72,13 +72,13 @@ class GameServiceImpl implements GameService {
         gameMapper.updateEntityFromDto(dto, entity);
 
         if (dto.genreIds() != null) {
-            Set<Genre> genres = new HashSet<>(genreRepository.findAllById(dto.genreIds()));
+            Set<Genre> genres = genreService.findAllByIds(dto.genreIds());
             entity.getGenres().clear();
             entity.getGenres().addAll(genres);
         }
 
         if (dto.platformIds() != null) {
-            Set<Platform> platforms = new HashSet<>(platformRepository.findAllById(dto.platformIds()));
+            Set<Platform> platforms = new HashSet<>(platformService.findAllByIds(dto.platformIds()));
             entity.getPlatforms().clear();
             entity.getPlatforms().addAll(platforms);
         }

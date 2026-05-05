@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class GameController {
     }
 
     @Operation(summary = "Endpoint for creating new game")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseWrapper<Long> create(@Valid @RequestBody GameRequestDto dto) {
@@ -49,6 +51,7 @@ public class GameController {
     }
 
     @Operation(summary = "Endpoint fo deleting game by id")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -56,6 +59,7 @@ public class GameController {
     }
 
     @Operation(summary = "Endpoint for updating game by id")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseWrapper<GameResponseDto> update(@PathVariable Long id,
                                                    @Valid @RequestBody GameRequestDto dto) {
