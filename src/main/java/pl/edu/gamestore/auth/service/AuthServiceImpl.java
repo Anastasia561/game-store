@@ -14,8 +14,8 @@ import pl.edu.gamestore.auth.dto.TokenResponseDto;
 import pl.edu.gamestore.auth.jwt.service.JwtService;
 import pl.edu.gamestore.auth.refreshtoken.service.RefreshTokenService;
 import pl.edu.gamestore.exception.InvalidRefreshTokenException;
-import pl.edu.gamestore.person.model.Person;
-import pl.edu.gamestore.person.service.PersonService;
+import pl.edu.gamestore.person.Person;
+import pl.edu.gamestore.person.PersonService;
 
 @Service
 @RequiredArgsConstructor

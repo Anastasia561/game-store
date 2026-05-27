@@ -11,3 +11,4 @@ openapi:
 app:
   jwt:
     secret: ${JWT_SECRET}
+  salt: ${SALT}

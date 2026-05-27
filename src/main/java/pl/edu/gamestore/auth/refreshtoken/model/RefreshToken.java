@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import pl.edu.gamestore.person.model.Person;
+import pl.edu.gamestore.person.Person;
 
 import java.time.Instant;
 

@@ -1,6 +1,6 @@
 package pl.edu.gamestore.auth.refreshtoken.service;
 
-import pl.edu.gamestore.person.model.Person;
+import pl.edu.gamestore.person.Person;
 
 public interface RefreshTokenService {
 

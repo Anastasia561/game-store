@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.gamestore.auth.jwt.JwtProperties;
 import pl.edu.gamestore.auth.refreshtoken.model.RefreshToken;
 import pl.edu.gamestore.auth.refreshtoken.repository.RefreshTokenRepository;
-import pl.edu.gamestore.person.model.Person;
+import pl.edu.gamestore.person.Person;
 
 import java.time.Instant;
 

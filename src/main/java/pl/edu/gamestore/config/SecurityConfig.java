@@ -23,7 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.edu.gamestore.auth.core.CustomUserDetails;
 import pl.edu.gamestore.auth.jwt.JwtAuthenticationFilter;
-import pl.edu.gamestore.person.repository.PersonRepository;
+import pl.edu.gamestore.person.PersonRepository;
 
 @Configuration
 @EnableMethodSecurity
@@ -68,7 +68,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/refresh", "/auth/logout",
                                 "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/games", "/games/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/games", "/games/{id}",
+                                "/genres", "/platforms").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

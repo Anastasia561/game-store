@@ -1,11 +1,13 @@
 package pl.edu.gamestore.game.dto;
 
+import pl.edu.gamestore.encryption.HashId;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
 public record GameResponseDto(
-        Long id,
+        HashId id,
         String title,
         String description,
         BigDecimal price,

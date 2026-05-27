@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import pl.edu.gamestore.encryption.HashId;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 public record GameRequestDto(
@@ -19,7 +21,7 @@ public record GameRequestDto(
         String description,
 
         @NotNull(message = "Price is required")
-        @DecimalMin(value = "0.0", inclusive = true)
+        @DecimalMin(value = "0.0")
         BigDecimal price,
 
         @NotNull(message = "Release date is required")
@@ -30,9 +32,9 @@ public record GameRequestDto(
         String imageUrl,
 
         @NotEmpty(message = "At least one genre must be selected")
-        Set<Long> genreIds,
+        Set<HashId> genreIds,
 
         @NotEmpty(message = "At least one platform must be selected")
-        Set<Long> platformIds
+        Set<HashId> platformIds
 ) {
 }
