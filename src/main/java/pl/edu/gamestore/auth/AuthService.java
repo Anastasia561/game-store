@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.service;
+package pl.edu.gamestore.auth;
 
 import pl.edu.gamestore.auth.dto.AuthRequestDto;
 import pl.edu.gamestore.auth.dto.TokenResponseDto;

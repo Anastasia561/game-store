@@ -1,7 +1,7 @@
-package pl.edu.gamestore.auth.jwt.service;
+package pl.edu.gamestore.auth.jwt;
 
 import io.jsonwebtoken.Claims;
-import pl.edu.gamestore.auth.core.CustomUserDetails;
+import pl.edu.gamestore.auth.CustomUserDetails;
 
 import java.util.Date;
 import java.util.function.Function;

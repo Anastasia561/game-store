@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.refreshtoken.model;
+package pl.edu.gamestore.auth.refreshtoken;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

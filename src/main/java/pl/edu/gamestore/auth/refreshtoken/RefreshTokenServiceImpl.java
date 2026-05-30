@@ -1,12 +1,10 @@
-package pl.edu.gamestore.auth.refreshtoken.service;
+package pl.edu.gamestore.auth.refreshtoken;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.gamestore.auth.jwt.JwtProperties;
-import pl.edu.gamestore.auth.refreshtoken.model.RefreshToken;
-import pl.edu.gamestore.auth.refreshtoken.repository.RefreshTokenRepository;
 import pl.edu.gamestore.person.Person;
 
 import java.time.Instant;

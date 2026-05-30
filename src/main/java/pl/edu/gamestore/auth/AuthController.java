@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.controller;
+package pl.edu.gamestore.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +18,6 @@ import pl.edu.gamestore.auth.dto.AuthRequestDto;
 import pl.edu.gamestore.auth.dto.AuthResponseDto;
 import pl.edu.gamestore.auth.dto.TokenResponseDto;
 import pl.edu.gamestore.auth.jwt.JwtProperties;
-import pl.edu.gamestore.auth.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")

@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.core;
+package pl.edu.gamestore.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

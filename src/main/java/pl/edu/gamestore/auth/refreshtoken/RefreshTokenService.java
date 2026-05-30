@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.refreshtoken.service;
+package pl.edu.gamestore.auth.refreshtoken;
 
 import pl.edu.gamestore.person.Person;
 

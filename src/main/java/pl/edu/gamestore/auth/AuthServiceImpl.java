@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.service;
+package pl.edu.gamestore.auth;
 
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -8,11 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import pl.edu.gamestore.auth.core.CustomUserDetails;
 import pl.edu.gamestore.auth.dto.AuthRequestDto;
 import pl.edu.gamestore.auth.dto.TokenResponseDto;
-import pl.edu.gamestore.auth.jwt.service.JwtService;
-import pl.edu.gamestore.auth.refreshtoken.service.RefreshTokenService;
+import pl.edu.gamestore.auth.jwt.JwtService;
+import pl.edu.gamestore.auth.refreshtoken.RefreshTokenService;
 import pl.edu.gamestore.exception.InvalidRefreshTokenException;
 import pl.edu.gamestore.person.Person;
 import pl.edu.gamestore.person.PersonService;

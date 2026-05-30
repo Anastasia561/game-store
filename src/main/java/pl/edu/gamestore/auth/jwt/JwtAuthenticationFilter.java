@@ -14,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.edu.gamestore.auth.core.CustomUserDetails;
-import pl.edu.gamestore.auth.jwt.service.JwtService;
+import pl.edu.gamestore.auth.CustomUserDetails;
 import pl.edu.gamestore.wrapper.ResponseWrapper;
 import tools.jackson.databind.ObjectMapper;
 

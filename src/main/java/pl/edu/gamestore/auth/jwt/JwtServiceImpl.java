@@ -1,12 +1,11 @@
-package pl.edu.gamestore.auth.jwt.service;
+package pl.edu.gamestore.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
-import pl.edu.gamestore.auth.core.CustomUserDetails;
-import pl.edu.gamestore.auth.jwt.JwtProperties;
+import pl.edu.gamestore.auth.CustomUserDetails;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
