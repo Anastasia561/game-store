@@ -9,7 +9,7 @@ import tools.jackson.databind.ValueDeserializer;
 @Component
 @RequiredArgsConstructor
 public class HashIdDeserializer extends ValueDeserializer<HashId> {
-    private final IdObfuscator idObfuscator;
+    private final IdObfuscatorServiceImpl idObfuscator;
 
     @Override
     public HashId deserialize(JsonParser p, DeserializationContext ctxt){

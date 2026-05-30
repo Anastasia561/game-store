@@ -1,4 +1,4 @@
-package pl.edu.gamestore.auth.controller;
+package pl.edu.gamestore.auth;
 
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;

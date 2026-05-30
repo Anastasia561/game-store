@@ -30,6 +30,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       DEV_SERVER_URL: ${DEV_SERVER_URL}
       JWT_SECRET: ${JWT_SECRET}
+      SALT: ${SALT}
     depends_on:
       postgres:
         condition: service_healthy

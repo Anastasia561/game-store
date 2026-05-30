@@ -1,12 +1,12 @@
-package pl.edu.gamestore.game.mapper;
+package pl.edu.gamestore.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import pl.edu.gamestore.game.GameMapper;
+import pl.edu.gamestore.encryption.HashId;
+import pl.edu.gamestore.encryption.HashIdMapper;
 import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
-import pl.edu.gamestore.game.Game;
 import pl.edu.gamestore.genre.GenreMapper;
 import pl.edu.gamestore.genre.Genre;
 import pl.edu.gamestore.platform.PlatformMapper;
@@ -29,6 +29,7 @@ class GameMapperTest {
         gameMapper = Mappers.getMapper(GameMapper.class);
         GenreMapper genreMapper = Mappers.getMapper(GenreMapper.class);
         PlatformMapper platformMapper = Mappers.getMapper(PlatformMapper.class);
+        HashIdMapper hashIdMapper = new HashIdMapper();
 
         Field genreMapperField = gameMapper.getClass().getDeclaredField("genreMapper");
         genreMapperField.setAccessible(true);
@@ -37,6 +38,10 @@ class GameMapperTest {
         Field platformMapperField = gameMapper.getClass().getDeclaredField("platformMapper");
         platformMapperField.setAccessible(true);
         platformMapperField.set(gameMapper, platformMapper);
+
+        Field hashIdMapperField = gameMapper.getClass().getDeclaredField("hashIdMapper");
+        hashIdMapperField.setAccessible(true);
+        hashIdMapperField.set(gameMapper, hashIdMapper);
     }
 
     @Test
@@ -74,7 +79,7 @@ class GameMapperTest {
     void shouldMapToEntity_whenInputIsValid() {
         GameRequestDto dto = new GameRequestDto("Title", "Description",
                 BigDecimal.valueOf(10), LocalDate.of(2025, 1, 1),
-                "img-url", Set.of(1L), Set.of(2L));
+                "img-url", Set.of(HashId.of(1L)), Set.of(HashId.of(2L)));
 
         Game entity = gameMapper.toEntity(dto);
 
@@ -97,7 +102,7 @@ class GameMapperTest {
 
         GameRequestDto dto = new GameRequestDto("New", "Desc", BigDecimal.ONE,
                 LocalDate.of(2024, 1, 1),
-                "img", Set.of(1L), Set.of(2L));
+                "img", Set.of(HashId.of(1L)), Set.of(HashId.of(2L)));
 
         gameMapper.updateEntityFromDto(dto, game);
 
@@ -120,7 +125,7 @@ class GameMapperTest {
 
         GameRequestDto dto = new GameRequestDto("New", "Desc", BigDecimal.ONE,
                 LocalDate.of(2024, 1, 1),
-                "img", Set.of(1L), Set.of(2L));
+                "img", Set.of(HashId.of(1L)), Set.of(HashId.of(2L)));
 
         gameMapper.updateEntityFromDto(dto, game);
 

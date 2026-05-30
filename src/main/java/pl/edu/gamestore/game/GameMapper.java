@@ -3,7 +3,7 @@ package pl.edu.gamestore.game;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import pl.edu.gamestore.config.HashIdMapper;
+import pl.edu.gamestore.encryption.HashIdMapper;
 import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
 import pl.edu.gamestore.genre.GenreMapper;

@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pl.edu.gamestore.auth.core.CustomUserDetails;
+import pl.edu.gamestore.auth.CustomUserDetails;
 import pl.edu.gamestore.auth.jwt.JwtAuthenticationFilter;
 import pl.edu.gamestore.person.PersonRepository;
 

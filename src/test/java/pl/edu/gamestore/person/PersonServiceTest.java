@@ -1,4 +1,4 @@
-package pl.edu.gamestore.person.service;
+package pl.edu.gamestore.person;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;

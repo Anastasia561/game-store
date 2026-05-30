@@ -2,22 +2,25 @@ package pl.edu.gamestore.encryption;
 
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class IdObfuscator {
+@Service
+class IdObfuscatorServiceImpl implements IdObfuscatorService {
     private static final int MIN_HASH_LENGTH = 8;
 
     private final Hashids hashids;
 
-    public IdObfuscator(@Value("${app.salt}") String salt) {
+    public IdObfuscatorServiceImpl(@Value("${app.salt}") String salt) {
         this.hashids = new Hashids(salt, MIN_HASH_LENGTH);
     }
+
+    @Override
     public String encode(Long id) {
         if (id == null) return null;
         return hashids.encode(id);
     }
 
+    @Override
     public Long decode(String hash) {
         if (hash == null || hash.isEmpty()) return null;
         long[] decoded = hashids.decode(hash);

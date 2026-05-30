@@ -1,4 +1,4 @@
-package pl.edu.gamestore.game.service;
+package pl.edu.gamestore.game;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import pl.edu.gamestore.game.GameServiceImpl;
+import pl.edu.gamestore.encryption.HashId;
 import pl.edu.gamestore.game.dto.GameFilterDto;
 import pl.edu.gamestore.game.dto.GameRequestDto;
 import pl.edu.gamestore.game.dto.GameResponseDto;
-import pl.edu.gamestore.game.GameMapper;
-import pl.edu.gamestore.game.Game;
-import pl.edu.gamestore.game.GameRepository;
 import pl.edu.gamestore.genre.Genre;
 import pl.edu.gamestore.genre.GenreService;
 import pl.edu.gamestore.platform.Platform;
@@ -61,10 +58,10 @@ class GameServiceTest {
         Game game1 = new Game();
         Game game2 = new Game();
 
-        GameResponseDto dto1 = new GameResponseDto(1L, "Test title", "desc",
+        GameResponseDto dto1 = new GameResponseDto(HashId.of(1L), "Test title", "desc",
                 BigDecimal.valueOf(20.4), LocalDate.of(2026, 10, 2), "url",
                 new HashSet<>(), new HashSet<>());
-        GameResponseDto dto2 = new GameResponseDto(1L, "Test title", "desc",
+        GameResponseDto dto2 = new GameResponseDto(HashId.of(2L), "Test title", "desc",
                 BigDecimal.valueOf(20.4), LocalDate.of(2026, 10, 2), "url",
                 new HashSet<>(), new HashSet<>());
 
@@ -88,13 +85,13 @@ class GameServiceTest {
 
     @Test
     void findById_shouldReturnGameDto_whenGameExists() {
-        Long id = 1L;
+        HashId id = HashId.of(1L);
         Game game = new Game();
-        GameResponseDto dto = new GameResponseDto(1L, "Test title", "desc",
+        GameResponseDto dto = new GameResponseDto(id, "Test title", "desc",
                 BigDecimal.valueOf(20.4), LocalDate.of(2026, 10, 2), "url",
                 new HashSet<>(), new HashSet<>());
 
-        when(gameRepository.findById(id)).thenReturn(Optional.of(game));
+        when(gameRepository.findById(1L)).thenReturn(Optional.of(game));
         when(gameMapper.toDto(game)).thenReturn(dto);
 
         GameResponseDto result = gameService.findById(id);
@@ -102,18 +99,19 @@ class GameServiceTest {
         assertNotNull(result);
         assertEquals(dto, result);
 
-        verify(gameRepository).findById(id);
+        verify(gameRepository).findById(1L);
         verify(gameMapper).toDto(game);
     }
 
     @Test
     void findById_shouldThrowException_whenGameNotFound() {
+        HashId hashId = HashId.of(1L);
         Long id = 1L;
 
         when(gameRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class,
-                () -> gameService.findById(id));
+                () -> gameService.findById(hashId));
 
         verify(gameRepository).findById(id);
         verifyNoInteractions(gameMapper);
@@ -122,7 +120,8 @@ class GameServiceTest {
     @Test
     void create_shouldCreateGameAndReturnId_whenInputIsValid() {
         GameRequestDto dto = new GameRequestDto("Witcher 3", "Des", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L, 2L), Set.of(10L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L), HashId.of(2L)), Set.of(HashId.of(10L)));
 
         Game game = new Game();
 
@@ -143,9 +142,9 @@ class GameServiceTest {
 
         when(gameRepository.save(game)).thenReturn(savedGame);
 
-        Long result = gameService.create(dto);
+        HashId result = gameService.create(dto);
 
-        assertEquals(100L, result);
+        assertEquals(100L, result.value());
 
         assertEquals(2, game.getGenres().size());
         assertEquals(1, game.getPlatforms().size());
@@ -159,9 +158,11 @@ class GameServiceTest {
     @Test
     void delete_shouldDeleteGame_whenIdExists() {
         Long id = 1L;
+        HashId hashId = HashId.of(1L);
+
         when(gameRepository.existsById(id)).thenReturn(true);
 
-        gameService.delete(id);
+        gameService.delete(hashId);
 
         verify(gameRepository).existsById(id);
         verify(gameRepository).deleteById(id);
@@ -170,9 +171,10 @@ class GameServiceTest {
     @Test
     void delete_shouldThrowException_whenGameNotFound() {
         Long id = 1L;
+        HashId hashId = HashId.of(1L);
         when(gameRepository.existsById(id)).thenReturn(false);
 
-        assertThrows(EntityNotFoundException.class, () -> gameService.delete(id));
+        assertThrows(EntityNotFoundException.class, () -> gameService.delete(hashId));
 
         verify(gameRepository).existsById(id);
         verify(gameRepository, never()).deleteById(any());
@@ -181,13 +183,15 @@ class GameServiceTest {
     @Test
     void update_shouldUpdateGame_whenInputIsValid() {
         Long id = 1L;
+        HashId hashId = HashId.of(1L);
 
         Game game = new Game();
         game.setGenres(new HashSet<>());
         game.setPlatforms(new HashSet<>());
 
         GameRequestDto dto = new GameRequestDto("Witcher 3", "Des", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L, 2L), Set.of(10L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L), HashId.of(2L)), Set.of(HashId.of(10L)));
 
         Genre g1 = new Genre();
         g1.setId(1L);
@@ -197,7 +201,7 @@ class GameServiceTest {
         Platform p1 = new Platform();
         p1.setId(10L);
 
-        GameResponseDto response = new GameResponseDto(1L, "Test title", "desc",
+        GameResponseDto response = new GameResponseDto(hashId, "Test title", "desc",
                 BigDecimal.valueOf(20.4), LocalDate.of(2026, 10, 2), "url",
                 new HashSet<>(), new HashSet<>());
 
@@ -206,7 +210,7 @@ class GameServiceTest {
         when(platformService.findAllByIds(dto.platformIds())).thenReturn(Set.of(p1));
         when(gameMapper.toDto(game)).thenReturn(response);
 
-        GameResponseDto result = gameService.update(id, dto);
+        GameResponseDto result = gameService.update(hashId, dto);
 
         assertEquals(response, result);
 
@@ -223,13 +227,16 @@ class GameServiceTest {
     @Test
     void update_shouldThrowException_whenGameNotFound() {
         Long id = 1L;
+        HashId hashId = HashId.of(1L);
+
         GameRequestDto dto = new GameRequestDto("Witcher 3", "Des", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L, 2L), Set.of(10L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L), HashId.of(2L)), Set.of(HashId.of(10L)));
 
         when(gameRepository.findById(id)).thenReturn(Optional.empty());
 
         EntityNotFoundException ex = assertThrows(EntityNotFoundException.class,
-                () -> gameService.update(id, dto));
+                () -> gameService.update(hashId, dto));
         assertEquals("Game not found", ex.getMessage());
 
         verifyNoInteractions(gameMapper, genreService, platformService);

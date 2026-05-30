@@ -13,9 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import pl.edu.gamestore.auth.dto.AuthRequestDto;
-import pl.edu.gamestore.auth.service.AuthService;
+import pl.edu.gamestore.auth.AuthService;
 import pl.edu.gamestore.config.PostgreSQLTestContainerConfig;
-import pl.edu.gamestore.person.model.Role;
+import pl.edu.gamestore.encryption.IdObfuscatorService;
+import pl.edu.gamestore.person.Role;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.springframework.http.HttpMethod.DELETE;
@@ -26,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static pl.edu.gamestore.person.model.Role.ADMIN;
 
 @SpringBootTest
 @Transactional
@@ -39,6 +39,9 @@ public abstract class AbstractControllerIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @Autowired
+    protected IdObfuscatorService idObfuscator;
 
     @Autowired
     protected EntityManager em;

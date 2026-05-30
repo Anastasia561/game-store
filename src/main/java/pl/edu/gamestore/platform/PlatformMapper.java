@@ -1,7 +1,7 @@
 package pl.edu.gamestore.platform;
 
 import org.mapstruct.Mapper;
-import pl.edu.gamestore.config.HashIdMapper;
+import pl.edu.gamestore.encryption.HashIdMapper;
 import pl.edu.gamestore.platform.dto.PlatformResponseDto;
 
 @Mapper(componentModel = "spring", uses = HashIdMapper.class)

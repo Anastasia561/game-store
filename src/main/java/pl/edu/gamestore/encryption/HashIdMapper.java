@@ -1,7 +1,6 @@
-package pl.edu.gamestore.config;
+package pl.edu.gamestore.encryption;
 
 import org.springframework.stereotype.Component;
-import pl.edu.gamestore.encryption.HashId;
 
 @Component
 public class HashIdMapper {

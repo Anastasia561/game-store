@@ -1,11 +1,11 @@
-package pl.edu.gamestore.game.controller;
+package pl.edu.gamestore.game;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.servlet.MvcResult;
 import pl.edu.gamestore.AbstractControllerIntegrationTest;
+import pl.edu.gamestore.encryption.HashId;
 import pl.edu.gamestore.game.dto.GameRequestDto;
-import pl.edu.gamestore.game.Game;
 import pl.edu.gamestore.genre.Genre;
 import pl.edu.gamestore.person.Role;
 import pl.edu.gamestore.platform.Platform;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class GameControllerTest extends AbstractControllerIntegrationTest {
+class GameControllerTest extends AbstractControllerIntegrationTest {
     @Test
     void shouldReturnPageOfGames_whenGamesExist() throws Exception {
         performRequest(HttpMethod.GET, "/games", null)
@@ -63,7 +63,7 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
 
     @Test
     void shouldReturnGame_whenSearchedById() throws Exception {
-        performRequest(HttpMethod.GET, "/games/{id}", null, 1)
+        performRequest(HttpMethod.GET, "/games/{id}", null, "DjYrMlv1")
                 .andExpect(status().isOk())
 
                 .andExpect(jsonPath("$.data.title").value("Elden Ring"))
@@ -79,7 +79,7 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
 
     @Test
     void shouldReturn404_whenGameNotFoundById() throws Exception {
-        performRequest(HttpMethod.GET, "/games/{id}", null, 1000)
+        performRequest(HttpMethod.GET, "/games/{id}", null, "0N3a7lzg")
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error.message").value("Game not found"));
     }
@@ -96,17 +96,21 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
         obtainRoleBasedToken(Role.ADMIN);
 
         GameRequestDto dto = new GameRequestDto("Witcher 3", "Des", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L, 2L), Set.of(1L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L), HashId.of(2L)), Set.of(HashId.of(1L)));
 
         MvcResult mvcResult = performRequest(HttpMethod.POST, "/games", dto)
                 .andExpect(status().isCreated())
                 .andReturn();
 
         JsonNode root = objectMapper.readTree(mvcResult.getResponse().getContentAsString());
-        Long id = root.path("data").asLong();
 
-        Game game = em.createQuery("SELECT a FROM Game a WHERE a.id = :id",
-                Game.class).setParameter("id", id).getSingleResult();
+        String hashedId = root.path("data").asString();
+        Long internalId = idObfuscator.decode(hashedId);
+
+        Game game = em.createQuery("SELECT a FROM Game a WHERE a.id = :id", Game.class)
+                .setParameter("id", internalId)
+                .getSingleResult();
 
         assertEquals("Witcher 3", game.getTitle());
         assertEquals("Des", game.getDescription());
@@ -122,7 +126,7 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
         obtainRoleBasedToken(Role.ADMIN);
 
         GameRequestDto dto = new GameRequestDto("", null, BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(), Set.of(1L));
+                LocalDate.of(2026, 10, 2), "url", Set.of(), Set.of(HashId.of(1L)));
 
         performRequest(HttpMethod.POST, "/games", dto)
                 .andExpect(status().isBadRequest())
@@ -134,7 +138,7 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
     @Test
     void shouldReturn404_whenGameNotFoundForDelete() throws Exception {
         obtainRoleBasedToken(Role.ADMIN);
-        performRequest(HttpMethod.DELETE, "/games/{id}", null, 1000)
+        performRequest(HttpMethod.DELETE, "/games/{id}", null, "0N3a7lzg")
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error.message").value("Game not found"));
     }
@@ -150,7 +154,7 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
     void shouldDeleteGame_whenInputIsValid() throws Exception {
         obtainRoleBasedToken(Role.ADMIN);
 
-        performRequest(HttpMethod.DELETE, "/games/{id}", null, 1)
+        performRequest(HttpMethod.DELETE, "/games/{id}", null, "DjYrMlv1")
                 .andExpect(status().isNoContent());
 
         Game found = em.find(Game.class, 1);
@@ -162,9 +166,10 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
         obtainRoleBasedToken(Role.ADMIN);
 
         GameRequestDto dto = new GameRequestDto("Test", "Test desc", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L), Set.of(1L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L)), Set.of(HashId.of(1L)));
 
-        performRequest(HttpMethod.PUT, "/games/{id}", dto, 1000)
+        performRequest(HttpMethod.PUT, "/games/{id}", dto, "0N3a7lzg")
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error.message").value("Game not found"));
     }
@@ -181,9 +186,10 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
         obtainRoleBasedToken(Role.ADMIN);
 
         GameRequestDto dto = new GameRequestDto("", null, BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(), Set.of(1L));
+                LocalDate.of(2026, 10, 2), "url", Set.of(),
+                Set.of(HashId.of(1L)));
 
-        performRequest(HttpMethod.PUT, "/games/{id}", dto, 1)
+        performRequest(HttpMethod.PUT, "/games/{id}", dto, "DjYrMlv1")
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error.message").value("Validation failed"))
                 .andExpect(jsonPath("$.error.validationErrors").isArray())
@@ -195,9 +201,10 @@ public class GameControllerTest extends AbstractControllerIntegrationTest {
         obtainRoleBasedToken(Role.ADMIN);
 
         GameRequestDto dto = new GameRequestDto("Test", "Test desc", BigDecimal.valueOf(20.4),
-                LocalDate.of(2026, 10, 2), "url", Set.of(1L), Set.of(1L));
+                LocalDate.of(2026, 10, 2), "url",
+                Set.of(HashId.of(1L)), Set.of(HashId.of(1L)));
 
-        performRequest(HttpMethod.PUT, "/games/{id}", dto, 1)
+        performRequest(HttpMethod.PUT, "/games/{id}", dto, "DjYrMlv1")
                 .andExpect(status().isOk())
 
                 .andExpect(jsonPath("$.data.title").value("Test"))
